@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <title>Document</title>
+  <style>
+
+
+  </style>
+</head>
+<body>
+<div class="container mt-5">
+  <button type="button" class="btn btn-outline-dark" data-url="/api/v1/logout" id="logout">Logout</button>
+  <div class="alert alert-danger d-none mt-5" id="alert_error" role="alert"></div>
+  <table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Email</th>
+      <th scope="col">Имя</th>
+      <th scope="col">Фамилия</th>
+      <th scope="col">Админ</th>
+      <th scope="col">Активный</th>
+      <th scope="col" class="d-flex justify-content-end">
+          <button type="button" class="btn btn-success "
+                  data-bs-toggle="modal" data-bs-target="#userAdd">Добавить</button>
+      </th>
+    </tr>
+  </thead>
+  <tbody id="user_list">
+  </tbody>
+</table>
+
+<!-- update -->
+<div class="modal fade" id="userUpdate" tabindex="-1" aria-labelledby="userUpdateModel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="userUpdateModel">Обновить Пользователя</h5>
+      </div>
+      <div class="modal-body">
+        <div class="form-floating">
+          <input type="email" class="form-control" id="update_email" placeholder="name@example.com">
+          <label for="update_email">Email</label>
+        </div>
+        <div class="form-floating">
+          <input type="password" class="form-control" id="update_password" placeholder="Password">
+          <label for="update_password">Password</label>
+        </div>
+          <div class="form-floating">
+          <input type="text" class="form-control" id="update_first_name" placeholder="Password">
+          <label for="update_first_name">First Name</label>
+        </div>
+        <div class="form-floating">
+          <input type="text" class="form-control" id="update_last_name" placeholder="Password">
+          <label for="update_last_name">Last Name</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input update_is_superuser" type="checkbox" value="" id="update_is_superuser">
+          <label class="form-check-label" for="update_is_superuser">
+            Суперпользователь
+          </label>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+        <button type="button" class="btn btn-primary" data-url="" id="update_user_button">Обновить</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<!-- add -->
+<div class="modal fade" id="userAdd" tabindex="-1" aria-labelledby="userAddModel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="userAddModel">Добавить Пользователя</h5>
+      </div>
+      <div class="modal-body">
+        <div class="form-floating">
+          <input type="email" class="form-control" id="add_email" placeholder="name@example.com">
+          <label for="add_email">Email</label>
+        </div>
+        <div class="form-floating">
+          <input type="password" class="form-control" id="add_password" placeholder="Password">
+          <label for="add_password">Password</label>
+        </div>
+          <div class="form-floating">
+          <input type="text" class="form-control" id="add_first_name" placeholder="Password">
+          <label for="add_first_name">First Name</label>
+        </div>
+        <div class="form-floating">
+          <input type="text" class="form-control" id="add_last_name" placeholder="Password">
+          <label for="add_last_name">Last Name</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input add_is_superuser" type="checkbox" value="" id="add_is_superuser">
+          <label class="form-check-label" for="add_is_superuser">
+            Суперпользователь
+          </label>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+        <button type="button" class="btn btn-primary"  id="user_add_button" data-url="/api/v1/users">Добавить</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" src="js/users.js"></script>
+</body>
+</html>
