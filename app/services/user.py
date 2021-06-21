@@ -133,7 +133,7 @@ def get_users():
     """
     with db.session() as session:
         users = session.execute(
-            select(User)
+            select(User).filter_by(is_active=True)
         ).fetchall()
 
     return [user.User for user in users]
