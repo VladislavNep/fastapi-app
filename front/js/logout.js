@@ -14,6 +14,7 @@ $('#logout_button').click(function() {
         },
         success: function (result) {
             window.localStorage.removeItem('access_token')
+            window.localStorage.removeItem('is_superuser')
             location="/login";
         },
         error: function(response){

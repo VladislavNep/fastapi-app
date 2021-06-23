@@ -12,8 +12,9 @@ $('#login_button').click(function() {
             password: password
         }),
         success: function (result) {
-            let token = JSON.parse(result);
-            window.localStorage.setItem('access_token', token.access_token);
+            let payload = JSON.parse(result);
+            window.localStorage.setItem('access_token', payload.access_token);
+            window.localStorage.setItem('is_superuser', payload.is_superuser);
             location="/users";
         },
         error: function(response){

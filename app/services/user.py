@@ -10,7 +10,7 @@ from psycopg2 import errors
 from schemas.user import UserSingUp, UserCreate
 
 
-def user_create(user: UserSingUp):
+def user_create_for_sing_up(user: UserSingUp):
     """
     Создаем пользователя при регистрации без прав суперпользователя
     :param user:
@@ -23,7 +23,8 @@ def user_create(user: UserSingUp):
                 email=user.email,
                 password=user_password,
                 first_name=user.first_name,
-                last_name=user.last_name
+                last_name=user.last_name,
+                is_superuser=False
             )
             session.add(user)
             session.commit()
@@ -38,7 +39,10 @@ def user_create(user: UserSingUp):
         raise HTTPException(status_code=400, detail='A duplicate user already exists')
 
 
-def user_create_by_admin(user: UserCreate):
+def user_create(user: UserCreate):
+    """
+    создаем пользователя, можем назначать любые поля
+    """
     try:
         with db.session() as session:
             user_password = password_hash(password=user.password)
@@ -104,7 +108,7 @@ def update_user(user_id: int, data: dict) -> None:
     :return:
     """
     # исключает все None поля
-    data = {k: v for k, v in data.items() if v}
+    data = {k: v for k, v in data.items() if v is not None and v != ''}
     # если обновляем пароль, то сначала хешируем
     if 'password' in data:
         data['password'] = password_hash(password=data['password'])

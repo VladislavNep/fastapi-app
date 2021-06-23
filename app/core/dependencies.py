@@ -21,4 +21,4 @@ def is_admin(request: Request):
         access_token = access_token.split()[1]
         user = auth.get_jwt_claims(token=access_token)
         if not user['user']['is_superuser']:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Permission Denied")
+            raise HTTPException(status_code=400, detail="Permission Denied")

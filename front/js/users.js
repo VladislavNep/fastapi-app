@@ -1,6 +1,6 @@
 $(document).ready(function () {
     let userToken = window.localStorage.getItem('access_token');
-    console.log(userToken);
+    let is_superuser = window.localStorage.getItem('is_superuser');
 
      $.ajax({
         method: 'GET',
@@ -13,22 +13,22 @@ $(document).ready(function () {
             let user_data
             result.forEach(function(data, index) {
               user_data += `
-                <tr>
+                <tr id="row_${data.id}">
                   <th scope="row">${data.id}</th>
-                  <td>${data.email}</td>
-                  <td>${data.first_name}</td>
-                  <td>${data.last_name}</td>
-                  <td>${data.is_superuser}</td>
-                  <td>${data.is_active}</td>
+                  <td id="email">${data.email}</td>
+                  <td id="first_name">${data.first_name}</td>
+                  <td id="last_name">${data.last_name}</td>
+                  <td id="is_superuser">${data.is_superuser}</td>
                   <td class="d-flex justify-content-end">
                   <button type="button" class="btn btn-warning mx-3" data-bs-toggle="modal" data-bs-target="#userUpdate"
-                  data-url="/api/v1/users/${data.id}/update">Обновить</button>
+                  data-url="/api/v1/users/${data.id}/update" data-id="${data.id}" id="userUpdateButton">Обновить</button>
                   <button type="button" class="btn btn-danger" id="userDeleteButton" data-url="/api/v1/users/${data.id}/delete">Удалить</button>
                   </td>
                 </tr>
                 `
             });
             $("#user_list").html(user_data);
+            setActionButtons(is_superuser);
         },
         error: function(response){
             console.log(response);
@@ -84,7 +84,7 @@ $('#user_add_button').click(function() {
     let password = document.getElementById("add_password").value
     let firstname = document.getElementById("add_first_name").value
     let lastname = document.getElementById("add_last_name").value
-    let is_superuser = document.querySelector('.add_is_superuser').checked
+    let is_superuser = document.querySelector('#flexSwitchCheckAdd').checked
 
      $.ajax({
         method: 'POST',
@@ -124,11 +124,12 @@ $('#user_add_button').click(function() {
 
 let userUpdateModal = document.getElementById('userUpdate')
 userUpdateModal.addEventListener('show.bs.modal', function (event) {
-    var button = event.relatedTarget
-    // Extract info from data-bs-* attributes
-    var url = button.getAttribute('data-url')
+    let button = event.relatedTarget
+    let url = button.getAttribute('data-url')
+    let id = button.getAttribute('data-id')
     let buttonModel = userUpdateModal.querySelector('#update_user_button')
     buttonModel.setAttribute('data-url', url)
+    setDefaultValue(id, userUpdateModal)
 })
 
 $(document).on("click", '#update_user_button', function() {
@@ -139,7 +140,7 @@ $(document).on("click", '#update_user_button', function() {
     let password = document.getElementById("update_password").value
     let firstname = document.getElementById("update_first_name").value
     let lastname = document.getElementById("update_last_name").value
-    let is_superuser = document.querySelector('.update_is_superuser').checked
+    let is_superuser = document.querySelector('#flexSwitchCheckUpdate').checked
 
      $.ajax({
         method: "PUT",
@@ -181,7 +182,7 @@ function clearInputs(){
 
     for (let i = 0;  i < inputs.length; i++) {
       inputs[i].value = '';
-    };
+    }
 }
 
 
@@ -215,3 +216,72 @@ $(document).on("click", '#logout', function() {
         }
     });
 });
+
+$(document).on("click", '#sources', function (){
+    let userToken = window.localStorage.getItem('access_token');
+
+     $.ajax({
+        method: 'GET',
+        url: '/api/v1/sources',
+        data: {},
+        headers: {
+            Authorization: `Bearer ${userToken}`
+        },
+        success: function (result) {
+            let user_data
+            result.forEach(function(data, index) {
+              user_data += `
+                <tr>
+                  <th scope="row">${data.id}</th>
+                  <td>${data.name}</td>
+                </tr>
+                `
+            });
+            $("#sources_list").html(user_data);
+        },
+        error: function(response){
+            console.log(response);
+            if (response.status === 401){
+                window.localStorage.removeItem('access_token');
+                location="/login";
+            } else {
+                let alert = document.getElementById("alert_error");
+                alert.classList.remove('d-none');
+                alert.innerHTML = response.responseText;
+            }
+
+        }
+    });
+})
+
+function setActionButtons(is_superuser) {
+    if (is_superuser === "false"){
+        let userAddButton = document.getElementById('userAddButton');
+        const userDeleteButton = document.querySelectorAll('#userUpdateButton');
+        const userUpdateButton = document.querySelectorAll('#userDeleteButton');
+        userAddButton.classList.add("disabled")
+        for (let elem of userDeleteButton) {
+          elem.classList.add("disabled")
+        }
+        for (let elem of userUpdateButton) {
+          elem.classList.add("disabled")
+        }
+
+    }
+
+}
+
+function setDefaultValue(id, modal){
+    let row_data = document.getElementById(`row_${id}`)
+
+    modal.querySelector("#update_email").value = row_data.querySelector("#email").textContent;
+    modal.querySelector("#update_first_name").value = row_data.querySelector("#first_name").textContent;
+    modal.querySelector("#update_last_name").value = row_data.querySelector("#last_name").textContent;
+    const is_superuser = row_data.querySelector("#is_superuser").textContent
+    if (is_superuser === 'true'){
+        modal.querySelector('#flexSwitchCheckUpdate').checked = true;
+    } else {
+        modal.querySelector('#flexSwitchCheckUpdate').checked = false;
+    }
+
+}

@@ -4,7 +4,7 @@ from fastapi.security import HTTPAuthorizationCredentials
 from core.dependencies import security, is_authentication
 from schemas.user import UserSingUp, UserAuth
 from services.auth import auth
-from services.user import get_user_by_email, user_create
+from services.user import get_user_by_email, user_create_for_sing_up
 
 
 router = APIRouter()
@@ -12,13 +12,14 @@ router = APIRouter()
 
 @router.post('/signup')
 def signup(user_data: UserSingUp):
-    new_user = user_create(user=user_data)
+    new_user = user_create_for_sing_up(user=user_data)
     access_token, refresh_token = auth.generate_tokens(user=new_user)
 
     return Response(status_code=status.HTTP_200_OK, content=json.dumps(
         {
             'access_token': access_token,
-            'refresh_token': refresh_token
+            'refresh_token': refresh_token,
+            'is_superuser': new_user.is_superuser
         }
     ))
 
@@ -37,7 +38,8 @@ def login(user_data: UserAuth):
     return Response(status_code=status.HTTP_200_OK, content=json.dumps(
         {
             'access_token': access_token,
-            'refresh_token': refresh_token
+            'refresh_token': refresh_token,
+            'is_superuser': user.User.is_superuser
         }
     ))
 

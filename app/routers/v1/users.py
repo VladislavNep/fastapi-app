@@ -3,7 +3,7 @@ from fastapi import APIRouter, Security, status, Response, HTTPException, Depend
 from core.dependencies import security, is_authentication, is_admin
 from fastapi.encoders import jsonable_encoder
 from schemas.user import UserDetail, UserCreate, UserUpdate
-from services.user import get_users, get_user_by_id, user_delete, user_create_by_admin, update_user
+from services.user import get_users, get_user_by_id, user_delete, user_create, update_user
 
 router = APIRouter()
 
@@ -49,7 +49,7 @@ def delete_user(user_id: int):
     dependencies=[Security(security), Depends(is_authentication), Depends(is_admin)]
 )
 def create_user(user: UserCreate):
-    new_user = user_create_by_admin(user=user)
+    new_user = user_create(user=user)
     return new_user
 
 

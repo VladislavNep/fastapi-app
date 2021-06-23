@@ -35,6 +35,7 @@ class Settings(BaseSettings):
 
     class Config:
         case_sensitive = True
+        env_file = os.path.join(Path(__file__).resolve().parent.parent, ".env")
 
 
 settings = Settings()
