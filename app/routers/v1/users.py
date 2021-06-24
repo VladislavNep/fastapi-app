@@ -32,7 +32,7 @@ def get_user(user_id: int):
 
 
 @router.delete(
-    '/users/{user_id}/delete',
+    '/users/{user_id}',
     dependencies=[Security(security), Depends(is_authentication), Depends(is_admin)]
 )
 def delete_user(user_id: int):
@@ -54,7 +54,7 @@ def create_user(user: UserCreate):
 
 
 @router.put(
-    '/users/{user_id}/update',
+    '/users/{user_id}',
     dependencies=[Security(security), Depends(is_authentication), Depends(is_admin)]
 )
 def user_update(user_id: int, data: UserUpdate):

@@ -21,8 +21,8 @@ $(document).ready(function () {
                   <td id="is_superuser">${data.is_superuser}</td>
                   <td class="d-flex justify-content-end">
                   <button type="button" class="btn btn-warning mx-3" data-bs-toggle="modal" data-bs-target="#userUpdate"
-                  data-url="/api/v1/users/${data.id}/update" data-id="${data.id}" id="userUpdateButton">Обновить</button>
-                  <button type="button" class="btn btn-danger" id="userDeleteButton" data-url="/api/v1/users/${data.id}/delete">Удалить</button>
+                  data-url="/api/v1/users/${data.id}" data-id="${data.id}" id="userUpdateButton">Обновить</button>
+                  <button type="button" class="btn btn-danger" id="userDeleteButton" data-url="/api/v1/users/${data.id}">Удалить</button>
                   </td>
                 </tr>
                 `
